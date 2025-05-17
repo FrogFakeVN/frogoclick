@@ -1,0 +1,163 @@
+SCRIPT:
+-------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>🐸 FrogoClick 🐸</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+  body {
+    background: linear-gradient(135deg, #a8e063, #56ab2f);
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0; padding: 1rem;
+    min-height: 100vh;
+    color: #fff;
+    user-select: none;
+  }
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    text-shadow: 2px 2px 5px #2e7d32;
+  }
+  #clickCounter {
+    margin: 1rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-shadow: 1px 1px 3px #2e7d32;
+  }
+  #frogsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 800px;
+  }
+  .frog {
+    cursor: pointer;
+    width: 100px;
+    height: 100px;
+    background: #4caf50;
+    border-radius: 50%;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    margin: 0.8rem;
+    transition: transform 0.15s ease;
+    flex-shrink: 0;
+  }
+  .frog:active {
+    transform: scale(0.9);
+  }
+  /* White eyes */
+  .eye-white {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: white;
+    border-radius: 50%;
+    top: 20px;
+  }
+  .eye-white.left {
+    left: 15px;
+  }
+  .eye-white.right {
+    right: 15px;
+  }
+  /* Black pupils */
+  .eye-pupil {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: black;
+    border-radius: 50%;
+    top: 26px;
+  }
+  .eye-pupil.left {
+    left: 23px;
+  }
+  .eye-pupil.right {
+    right: 23px;
+  }
+  /* Mouth */
+  .mouth {
+    position: absolute;
+    width: 40px;
+    height: 20px;
+    background: transparent;
+    border: 5px solid black;
+    border-radius: 0 0 20px 20px;
+    top: 55px;
+    left: 30px;
+  }
+</style>
+</head>
+<body>
+<h1>FrogoClick</h1>
+<div id="clickCounter">Click: 0</div>
+<div id="frogsContainer" aria-live="polite" aria-atomic="true">
+  <div class="frog" tabindex="0" aria-label="Cute Frog">
+    <div class="eye-white left"></div>
+    <div class="eye-white right"></div>
+    <div class="eye-pupil left"></div>
+    <div class="eye-pupil right"></div>
+    <div class="mouth"></div>
+  </div>
+</div>
+
+<script>
+  (() => {
+    const container = document.getElementById('frogsContainer');
+    const counter = document.getElementById('clickCounter');
+    let clicks = 0;
+
+    function updateCounter() {
+      counter.textContent = 'Click: ' + clicks;
+    }
+
+    function createFrog() {
+      const frog = document.createElement('div');
+      frog.classList.add('frog');
+      frog.tabIndex = 0;
+      frog.setAttribute('aria-label', 'Cute Frog');
+      // Add eyes and mouth inside
+      frog.innerHTML = `
+        <div class="eye-white left"></div>
+        <div class="eye-white right"></div>
+        <div class="eye-pupil left"></div>
+        <div class="eye-pupil right"></div>
+        <div class="mouth"></div>
+      `;
+      frog.addEventListener('click', frogClickHandler);
+      frog.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          frog.click();
+        }
+      });
+      container.appendChild(frog);
+    }
+
+    function frogClickHandler() {
+      clicks++;
+      updateCounter();
+      createFrog();
+    }
+
+    // Attach listeners to the initial frog
+    const initialFrog = container.querySelector('.frog');
+    initialFrog.addEventListener('click', frogClickHandler);
+    initialFrog.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        initialFrog.click();
+      }
+    });
+
+    updateCounter();
+  })();
+</script>
+</body>
+</html>
